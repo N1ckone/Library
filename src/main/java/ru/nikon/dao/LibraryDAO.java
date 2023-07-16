@@ -54,14 +54,14 @@ public class LibraryDAO {
                 new int[]{Types.INTEGER}, new BeanPropertyRowMapper<>(Book.class)).stream().findAny();
     }
 
-    public void insertBook(Book book, int personID) {
-        jdbcTemplate.update("INSERT INTO Book(person_id, name, author, year) VALUES(?,?,?,?)",
-                personID, book.getName(), book.getAuthor(), book.getYear());
+    public void insertBook(Book book) {
+        jdbcTemplate.update("INSERT INTO Book(name, author, year) VALUES(?,?,?)",
+               book.getName(), book.getAuthor(), book.getYear());
     }
 
-    public void updateBook(Book book, int id, int personID) {
-        jdbcTemplate.update("UPDATE Book SET person_id = ?, name = ?, author = ?, year = ? WHERE id = ?",
-                personID, book.getName(), book.getAuthor(), book.getYear(), id);
+    public void updateBook(Book book, int id) {
+        jdbcTemplate.update("UPDATE Book SET name = ?, author = ?, year = ? WHERE id = ?",
+                book.getName(), book.getAuthor(), book.getYear(), id);
     }
 
     public void deleteBook(int id) {

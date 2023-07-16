@@ -2,7 +2,7 @@ package ru.nikon.models;
 
 public class Book {
     private int id;
-
+    
     private String name;
     private String author;
     private int year;
@@ -13,6 +13,8 @@ public class Book {
         this.author = author;
         this.year = year;
     }
+
+    public Book() {}
 
     public String getName() {
         return name;
