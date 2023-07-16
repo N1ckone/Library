@@ -70,8 +70,11 @@
       <artifactId>postgresql</artifactId>
       <version>42.6.0</version>
     </dependency>
-
-
+    <dependency>
+      <groupId>org.hibernate.validator</groupId>
+      <artifactId>hibernate-validator</artifactId>
+      <version>6.2.0.Final</version>
+    </dependency>
   </dependencies>
 
   <build>

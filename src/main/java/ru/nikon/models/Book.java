@@ -1,10 +1,17 @@
 package ru.nikon.models;
 
+import javax.validation.constraints.*;
+
+
 public class Book {
     private int id;
-    
+
+    @NotEmpty(message = "Введите название")
     private String name;
+
     private String author;
+    @Min(value = 0, message = "Год написания должен быть положительным числом")
+    @Max(value = 2023, message = "Год написания не может быть больше 2023")
     private int year;
 
     public Book(int id, String name, String author, int year) {

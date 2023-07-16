@@ -3,9 +3,12 @@ package ru.nikon.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.nikon.dao.LibraryDAO;
 import ru.nikon.models.Person;
+
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/people")
@@ -35,7 +38,10 @@ public class PeopleController {
     }
 
     @PostMapping()
-    public String create(@ModelAttribute Person person) {
+    public String create(@ModelAttribute @Valid Person person, BindingResult bs) {
+        if(bs.hasErrors()) {
+            return "people/new";
+        }
         dao.insertPerson(person);
         return "redirect:/people";
     }
@@ -47,7 +53,10 @@ public class PeopleController {
     }
 
     @PatchMapping("/{id}")
-    public String edit(@ModelAttribute Person person, @PathVariable("id") int id) {
+    public String edit(@ModelAttribute @Valid Person person, @PathVariable("id") int id, BindingResult bs) {
+        if(bs.hasErrors()) {
+            return "people/edit";
+        }
         dao.updatePerson(person, id);
         return "redirect:/people/{id}";
     }

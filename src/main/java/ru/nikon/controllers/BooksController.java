@@ -3,9 +3,12 @@ package ru.nikon.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.nikon.dao.LibraryDAO;
 import ru.nikon.models.Book;
+
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/books")
@@ -36,7 +39,10 @@ public class BooksController {
     }
 
     @PostMapping()
-    public String insert(@ModelAttribute Book book) {
+    public String insert(@ModelAttribute @Valid Book book, BindingResult bs) {
+        if(bs.hasErrors()) {
+            return "books/new";
+        }
         dao.insertBook(book);
         return "redirect:/books";
     }
@@ -48,7 +54,10 @@ public class BooksController {
     }
 
     @PatchMapping("/{id}")
-    public String update(@ModelAttribute Book book, @PathVariable("id") int id) {
+    public String update(@ModelAttribute @Valid Book book, @PathVariable("id") int id, BindingResult bs) {
+        if(bs.hasErrors()) {
+            return "books/{id}/edit";
+        }
         dao.updateBook(book, id);
         return "redirect:/books/{id}";
     }
