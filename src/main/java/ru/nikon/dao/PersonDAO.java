@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import ru.nikon.models.Book;
 import ru.nikon.models.Person;
+import util.BookRower;
 import util.PersonRower;
 
 import java.sql.Types;
@@ -46,6 +47,6 @@ public class PersonDAO {
 
     public List<Book> getBooksList(int id) {
         return jdbcTemplate.query("SELECT Book.* FROM Person join Book ON Person.Id = Book.person_id WHERE Person.id = ?",
-                new Object[]{id}, new int[]{Types.INTEGER}, new BeanPropertyRowMapper<>());
+                new Object[]{id}, new int[]{Types.INTEGER}, new BookRower());
     }
 }
