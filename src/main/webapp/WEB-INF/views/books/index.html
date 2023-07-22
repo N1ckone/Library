@@ -9,6 +9,23 @@
 <p th:text="${book.getId()}">Id</p>
 <p th:text="${book.getAuthor()}">Author</p>
 <p th:text="${book.getYear()}">Year</p>
+<div th:if="${!person.isPresent()}">
+    <form th:method="PATCH" th:action="@{/books/{id}/appoint(id=${book.getId()})}">
+        <label for="person">Эта книга свободна. Кому назначить ее ? <br/>Выберете человека: </label>
+        <select th:object="${person}" th:field="*{id}" id="person">
+            <option th:each="person : ${people}" th:value="${person.getId()}" th:text="${person.getName()}">
+            </option>
+        </select>
+        <input type="submit" value="Назначить">
+    </form>
+</div>
+<div th:if="${person.isPresent()}">
+    <p>Книга занята. Владелец:</p>
+    <p th:text="${person.get().getName()}">Name</p>
+    <form th:method="PATCH" th:action="@{/books/{id}/leave(id=${book.getId()})}" th:object="${person}">
+        <input type="submit" value="Освободить" id="leave">
+    </form>
+</div>
 <hr/>
 <form th:method="GET" th:action="@{/books/{id}/edit(id=${book.getId()})}">
     <input type="submit" value="Edit">

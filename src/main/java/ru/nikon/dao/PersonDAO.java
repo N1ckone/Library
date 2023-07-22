@@ -13,14 +13,13 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
-public class LibraryDAO {
+public class PersonDAO {
     private final JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public LibraryDAO(JdbcTemplate jdbcTemplate) {
+    public PersonDAO(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
-
     public List<Person> getPeople() {
         return jdbcTemplate.query("SELECT * FROM Person", new PersonRower());
     }
@@ -45,27 +44,8 @@ public class LibraryDAO {
         jdbcTemplate.update("DELETE FROM Person WHERE id = ?", id);
     }
 
-    public List<Book> getBooks() {
-        return jdbcTemplate.query("SELECT * FROM Book", new BeanPropertyRowMapper<>(Book.class));
+    public List<Book> getBooksList(int id) {
+        return jdbcTemplate.query("SELECT Book.* FROM Person join Book ON Person.Id = Book.person_id WHERE Person.id = ?",
+                new Object[]{id}, new int[]{Types.INTEGER}, new BeanPropertyRowMapper<>());
     }
-
-    public Optional selectBook(int id) {
-        return jdbcTemplate.query("SELECT * FROM Book WHERE id = ?", new Object[]{id},
-                new int[]{Types.INTEGER}, new BeanPropertyRowMapper<>(Book.class)).stream().findAny();
-    }
-
-    public void insertBook(Book book) {
-        jdbcTemplate.update("INSERT INTO Book(name, author, year) VALUES(?,?,?)",
-               book.getName(), book.getAuthor(), book.getYear());
-    }
-
-    public void updateBook(Book book, int id) {
-        jdbcTemplate.update("UPDATE Book SET name = ?, author = ?, year = ? WHERE id = ?",
-                book.getName(), book.getAuthor(), book.getYear(), id);
-    }
-
-    public void deleteBook(int id) {
-        jdbcTemplate.update("DELETE FROM Book WHERE id = ?", id);
-    }
-
 }

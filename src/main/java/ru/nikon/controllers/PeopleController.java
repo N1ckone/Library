@@ -5,7 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ru.nikon.dao.LibraryDAO;
+import ru.nikon.dao.PersonDAO;
 import ru.nikon.models.Person;
 
 import javax.validation.Valid;
@@ -13,10 +13,10 @@ import javax.validation.Valid;
 @Controller
 @RequestMapping("/people")
 public class PeopleController {
-    private LibraryDAO dao;
+    private PersonDAO dao;
 
     @Autowired
-    public PeopleController(LibraryDAO dao) {
+    public PeopleController(PersonDAO dao) {
         this.dao = dao;
     }
 

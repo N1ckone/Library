@@ -5,20 +5,25 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ru.nikon.dao.LibraryDAO;
+import ru.nikon.dao.BookDAO;
+import ru.nikon.dao.PersonDAO;
 import ru.nikon.models.Book;
+import ru.nikon.models.Person;
 
 import javax.validation.Valid;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/books")
 public class BooksController {
 
-    private LibraryDAO dao;
+    private BookDAO dao;
+    private PersonDAO personDAO;
 
     @Autowired
-    public BooksController(LibraryDAO dao) {
+    public BooksController(BookDAO dao, PersonDAO personDAO) {
         this.dao = dao;
+        this.personDAO = personDAO;
     }
 
     @GetMapping()
@@ -29,7 +34,10 @@ public class BooksController {
 
     @GetMapping("/{id}")
     public String showBook(Model model, @PathVariable("id") int id) {
-        model.addAttribute("book", dao.selectBook(id).get());
+        Book book = (Book) dao.selectBook(id).get();
+        model.addAttribute("book", book);
+        model.addAttribute("person", dao.getBookOwner(book.getName()));
+        model.addAttribute("people", personDAO.getPeople());
         return "books/index";
     }
 
@@ -56,7 +64,7 @@ public class BooksController {
     @PatchMapping("/{id}")
     public String update(@ModelAttribute @Valid Book book, @PathVariable("id") int id, BindingResult bs) {
         if(bs.hasErrors()) {
-            return "books/{id}/edit";
+            return "books/edit";
         }
         dao.updateBook(book, id);
         return "redirect:/books/{id}";
@@ -66,6 +74,18 @@ public class BooksController {
     public String delete(@PathVariable("id") int id) {
         dao.deleteBook(id);
         return "redirect:/books";
+    }
+
+    @PatchMapping("/{id}/appoint")
+    public String appoint(@ModelAttribute Person person, @PathVariable("id") int id) {
+        dao.appoint(id, person.getId());
+        return "redirect:/books/{id}";
+    }
+
+    @PatchMapping("/{id}/leave")
+    public String leave(@PathVariable("id") int id) {
+        dao.leave(id);
+        return "redirect:/books/{id}";
     }
 
 

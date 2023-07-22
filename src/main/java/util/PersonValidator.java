@@ -4,17 +4,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
-import ru.nikon.dao.LibraryDAO;
+import ru.nikon.dao.PersonDAO;
 import ru.nikon.models.Person;
-
-import javax.validation.constraints.Email;
 
 @Component
 public class PersonValidator implements Validator {
-    private LibraryDAO dao;
+    private PersonDAO dao;
 
     @Autowired
-    public PersonValidator(LibraryDAO dao) {
+    public PersonValidator(PersonDAO dao) {
         this.dao = dao;
     }
 
