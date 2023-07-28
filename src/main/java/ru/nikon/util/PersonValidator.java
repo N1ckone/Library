@@ -1,4 +1,4 @@
-package util;
+package ru.nikon.util;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -25,8 +25,8 @@ public class PersonValidator implements Validator {
     @Override
     public void validate(Object target, Errors errors) {
         Person person = (Person) target;
-        if(errors.hasErrors()) {
-
+        if (dao.selectPerson(person.getName()).isPresent()) {
+            errors.rejectValue("name", "", "Такой пользователь уже зарегистрирован");
         }
     }
 }

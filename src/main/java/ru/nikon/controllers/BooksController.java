@@ -11,7 +11,6 @@ import ru.nikon.models.Book;
 import ru.nikon.models.Person;
 
 import javax.validation.Valid;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/books")
@@ -19,6 +18,7 @@ public class BooksController {
 
     private BookDAO dao;
     private PersonDAO personDAO;
+
 
     @Autowired
     public BooksController(BookDAO dao, PersonDAO personDAO) {
@@ -62,7 +62,7 @@ public class BooksController {
     }
 
     @PatchMapping("/{id}")
-    public String update(@ModelAttribute @Valid Book book, @PathVariable("id") int id, BindingResult bs) {
+    public String update(@ModelAttribute @Valid Book book, BindingResult bs, @PathVariable("id") int id) {
         if(bs.hasErrors()) {
             return "books/edit";
         }
