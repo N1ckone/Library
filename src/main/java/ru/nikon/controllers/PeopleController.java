@@ -7,6 +7,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.nikon.dao.PersonDAO;
 import ru.nikon.models.Person;
+import ru.nikon.util.PersonValidator;
 
 import javax.validation.Valid;
 
@@ -14,10 +15,12 @@ import javax.validation.Valid;
 @RequestMapping("/people")
 public class PeopleController {
     private PersonDAO dao;
+    private PersonValidator validator;
 
     @Autowired
-    public PeopleController(PersonDAO dao) {
+    public PeopleController(PersonDAO dao, PersonValidator validator) {
         this.dao = dao;
+        this.validator = validator;
     }
 
     @GetMapping()
@@ -40,6 +43,7 @@ public class PeopleController {
 
     @PostMapping()
     public String create(@ModelAttribute @Valid Person person, BindingResult bs) {
+        validator.validate(person, bs);
         if(bs.hasErrors()) {
             return "people/new";
         }
@@ -54,7 +58,7 @@ public class PeopleController {
     }
 
     @PatchMapping("/{id}")
-    public String edit(@ModelAttribute @Valid Person person, @PathVariable("id") int id, BindingResult bs) {
+    public String update(@ModelAttribute @Valid Person person, BindingResult bs, @PathVariable("id") int id) {
         if(bs.hasErrors()) {
             return "people/edit";
         }

@@ -1,13 +1,12 @@
 package ru.nikon.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import ru.nikon.models.Book;
 import ru.nikon.models.Person;
-import util.BookRower;
-import util.PersonRower;
+import ru.nikon.util.BookRower;
+import ru.nikon.util.PersonRower;
 
 import java.sql.Types;
 import java.util.List;
@@ -31,6 +30,11 @@ public class PersonDAO {
                 new PersonRower()).stream().findAny();
     }
 
+    public Optional selectPerson(String name) {
+        return jdbcTemplate.query("SELECT * FROM Person WHERE name = ?",
+                new Object[]{name}, new int[]{Types.VARCHAR},
+                new PersonRower()).stream().findAny();
+    }
     public void insertPerson(Person person) {
         jdbcTemplate.update("INSERT INTO Person(name,birth_year) VALUES(?,?)",
                 person.getName(), person.getBirthYear());

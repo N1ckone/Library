@@ -1,4 +1,4 @@
-package util;
+package ru.nikon.util;
 
 import org.springframework.jdbc.core.RowMapper;
 import ru.nikon.models.Book;
