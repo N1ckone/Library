@@ -9,6 +9,7 @@ import ru.nikon.dao.BookDAO;
 import ru.nikon.dao.PersonDAO;
 import ru.nikon.models.Book;
 import ru.nikon.models.Person;
+import ru.nikon.util.BookValidator;
 
 import javax.validation.Valid;
 
@@ -18,12 +19,14 @@ public class BooksController {
 
     private BookDAO dao;
     private PersonDAO personDAO;
+    private BookValidator validator;
 
 
     @Autowired
-    public BooksController(BookDAO dao, PersonDAO personDAO) {
+    public BooksController(BookDAO dao, PersonDAO personDAO, BookValidator validator) {
         this.dao = dao;
         this.personDAO = personDAO;
+        this.validator = validator;
     }
 
     @GetMapping()
@@ -48,6 +51,7 @@ public class BooksController {
 
     @PostMapping()
     public String insert(@ModelAttribute @Valid Book book, BindingResult bs) {
+        validator.validate(book, bs);
         if(bs.hasErrors()) {
             return "books/new";
         }
