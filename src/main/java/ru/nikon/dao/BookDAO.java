@@ -29,14 +29,9 @@ public class BookDAO {
                 new int[]{Types.INTEGER}, new BeanPropertyRowMapper<>(Book.class)).stream().findAny();
     }
 
-    public Optional selectBook(String name) {
-        return jdbcTemplate.query("SELECT * FROM Book WHERE name = ?", new Object[]{name},
-                new int[]{Types.VARCHAR}, new BeanPropertyRowMapper<>(Book.class)).stream().findAny();
-    }
-
-    public Optional getBookOwner(String bookName) {
-        return jdbcTemplate.query("SELECT Person.* FROM Person JOIN BOOK on person.id = book.person_id WHERE book.name = ?",
-                new Object[]{bookName}, new int[]{Types.VARCHAR}, new BeanPropertyRowMapper<>(Person.class)).stream().findAny();
+    public Optional getBookOwner(int id) {
+        return jdbcTemplate.query("SELECT Person.* FROM Person JOIN BOOK on person.id = book.person_id WHERE book.id = ?",
+                new Object[]{id}, new int[]{Types.INTEGER}, new BeanPropertyRowMapper<>(Person.class)).stream().findAny();
     }
 
     public void insertBook(Book book) {

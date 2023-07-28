@@ -11,6 +11,7 @@ import ru.nikon.models.Book;
 import ru.nikon.models.Person;
 
 import javax.validation.Valid;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/books")
@@ -35,7 +36,7 @@ public class BooksController {
     public String showBook(Model model, @PathVariable("id") int id) {
         Book book = (Book) dao.selectBook(id).get();
         model.addAttribute("book", book);
-        model.addAttribute("person", dao.getBookOwner(book.getName()));
+        model.addAttribute("person", dao.getBookOwner(id));
         model.addAttribute("people", personDAO.getPeople());
         return "books/index";
     }

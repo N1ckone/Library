@@ -50,7 +50,7 @@ public class PersonDAO {
     }
 
     public List<Book> getBooksList(int id) {
-        return jdbcTemplate.query("SELECT Book.* FROM Person join Book ON Person.Id = Book.person_id WHERE Person.id = ?",
+        return jdbcTemplate.query("SELECT * FROM Book WHERE person_id = ?",
                 new Object[]{id}, new int[]{Types.INTEGER}, new BookRower());
     }
 }
